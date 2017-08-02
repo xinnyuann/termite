@@ -22,7 +22,9 @@ A long term goal of this project is to decouple termite visualization from the t
 
 To install Termite, from the main directory, execute:
 
-`./setup.sh`
+```
+./setup.sh
+```
 
 Termite will fetch a number of libraries it has as dependencies to your computer.
 
@@ -30,8 +32,9 @@ Termite will fetch a number of libraries it has as dependencies to your computer
 
  Once the installation is concluded, **README.old** will recommend running one of its examples. However, the example corpus can no longer be downloaded. To explicitly overwrite the necessary parts to run the configuration file, directly using `execute.py` with explicit parameters can launch the visualization. Specifically:
 
-
-`./execute.py --corpus-path <corpus_file> example_lda.cfg --model-path <any_path_for_model> --data-path <any_path_for_output>`
+```
+./execute.py --corpus-path <corpus_file> example_lda.cfg --model-path <any_path_for_model> --data-path <any_path_for_output>
+```
 
 
  * `--corpus-path` Specifies the corpus single file of interest. finance_corpus.txt, hosted in our Github project, is an example corpus [originally found on Termite creator's Github](https://github.com/YingHsuan/termite_data_server/blob/master/apps/mobile_payment_mallet/data/corpus.txt) that can be used for a test-run.
@@ -45,11 +48,15 @@ Finally, to open the visualization in your own computer, as instructed by **READ
 
  1. Change into output directory (specified in the configuration file)
 
-`cd <any_path_for_output>/public_html`
+```
+cd <any_path_for_output>/public_html
+```
 
  2. Start a local server using python
 
-`./web.sh`
+```
+./web.sh
+```
 
  3. Open http://localhost:8888 in a modern web browser (Chrome, Safari, Firefox, or Opera)
       to view a visualization of the model outputs.
