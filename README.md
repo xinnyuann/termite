@@ -22,7 +22,7 @@ A long term goal of this project is to decouple termite visualization from the t
 
 To install Termite, from the main directory, execute:
 
-`./setup.py`
+`./setup.sh`
 
 Termite will fetch a number of libraries it has as dependencies to your computer.
 
