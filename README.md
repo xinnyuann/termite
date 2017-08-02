@@ -16,7 +16,7 @@ Currently, there are some dependencies "hiccups" when running Termite out of the
 
 A long term goal of this project is to decouple termite visualization from the termite data pipeline, by deferring the required input to a topic-term matrix and a document-topic matrix instead of the raw corpus. In doing so, other implementations of LDA and Topic Modelling, in general, can leverage the interface provided by Termite. A great example of this decoupling is [LDAVis](https://github.com/cpsievert/LDAvis), an r package visualization serving the same purpose and inspired by Termite.
 
-## Usage
+## Setup
 
 [README.old](https://github.com/sailuh/termite/blob/master/README.old) provides a great picture of how Termite was intended to execute when development was active.
 
@@ -29,6 +29,8 @@ To install Termite, from the main directory, execute:
 Termite will fetch a number of libraries it has as dependencies to your computer.
 
  * While installing the required dependencies, `setup.py`  will first throw an error stating it can't move the file `compiler-latest.zip`. Inspecting the .zip file manually, you will find a jar file containing the expected file, however with a different name convention: `name+version`. Simple extract the closure<version>.jar file, and rename it to `closure.jar` inside the `lib` folder. Re-running the script will then rename it to the intended name, and finish installing.
+
+## Usage
 
  Once the installation is concluded, **README.old** will recommend running one of its examples. However, the example corpus can no longer be downloaded. To explicitly overwrite the necessary parts to run the configuration file, directly using `execute.py` with explicit parameters can launch the visualization. Specifically:
 
