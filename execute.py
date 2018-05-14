@@ -9,8 +9,8 @@ import logging
 import time
 import os
 from pipeline.tokenize import Tokenize
-from pipeline.import_mallet import ImportMallet
-from pipeline.import_stmt import ImportStmt
+#from pipeline.import_mallet import ImportMallet
+#from pipeline.import_stmt import ImportStmt
 from pipeline.compute_saliency import ComputeSaliency
 from pipeline.compute_similarity import ComputeSimilarity
 from pipeline.compute_seriation import ComputeSeriation
@@ -50,7 +50,7 @@ class Execute( object ):
 		assert corpus_format is not None
 		assert corpus_path is not None
 		assert model_library is not None
-		assert model_library == 'stmt' or model_library == 'mallet'
+		#assert model_library == 'stmt' or model_library == 'mallet'
 		assert model_path is not None
 		assert data_path is not None
 		if num_topics is None:
@@ -58,26 +58,26 @@ class Execute( object ):
 		assert number_of_seriated_terms is not None
 		
 		self.logger.info( '--------------------------------------------------------------------------------' )
-		self.logger.info( 'Tokenizing source corpus...'                                                      )
+		#self.logger.info( 'Tokenizing source corpus...'                                                      )
 		self.logger.info( '    corpus_path = %s (%s)', corpus_path, corpus_format                            )
 		self.logger.info( '    model_path = %s (%s)', model_path, model_library                              )
 		self.logger.info( '    data_path = %s', data_path                                                    )
 		self.logger.info( '    num_topics = %d', num_topics                                                  )
 		self.logger.info( '    number_of_seriated_terms = %s', number_of_seriated_terms                      )
 		self.logger.info( '--------------------------------------------------------------------------------' )
-		self.logger.info( 'Current time = {}'.format( time.ctime() ) )
+		#self.logger.info( 'Current time = {}'.format( time.ctime() ) )
 		
-		Tokenize( self.logger.level ).execute( corpus_format, corpus_path, data_path, tokenization )
-		self.logger.info( 'Current time = {}'.format( time.ctime() ) )
+		# Tokenize( self.logger.level ).execute( corpus_format, corpus_path, data_path, tokenization )
+		# self.logger.info( 'Current time = {}'.format( time.ctime() ) )
 		
-		if model_library == 'stmt':
-			command = 'pipeline/train_stmt.sh {} {} {}'.format( data_path + '/tokens/tokens.txt', model_path, num_topics )
-			os.system( command )
-			ImportStmt( self.logger.level ).execute( model_library, model_path, data_path )
-		if model_library == 'mallet':
-			command = 'pipeline/train_mallet.sh {} {} {}'.format( data_path + '/tokens/tokens.txt', model_path, num_topics )
-			os.system( command )
-			ImportMallet( self.logger.level ).execute( model_library, model_path, data_path )
+		# if model_library == 'stmt':
+		# 	command = 'pipeline/train_stmt.sh {} {} {}'.format( data_path + '/tokens/tokens.txt', model_path, num_topics )
+		# 	os.system( command )
+		# 	ImportStmt( self.logger.level ).execute( model_library, model_path, data_path )
+		# if model_library == 'mallet':
+		# 	command = 'pipeline/train_mallet.sh {} {} {}'.format( data_path + '/tokens/tokens.txt', model_path, num_topics )
+		# 	os.system( command )
+		# 	ImportMallet( self.logger.level ).execute( model_library, model_path, data_path )
 		self.logger.info( 'Current time = {}'.format( time.ctime() ) )
 		
 		ComputeSaliency( self.logger.level ).execute( data_path )
