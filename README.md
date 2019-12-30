@@ -2,69 +2,103 @@
 
 ![termite_interface_not_loaded](doc/termite_interface.png)
 
-This is a forked project of Termite by Chuang et al [1].
+This is a fork project of Termite by Chuang et al [1].
 
-Termite is a visualization tool for inspecting the output of statistical topic models such as LDA. Provided a corpus `.csv` file, it generates an interactive interface to inspect topics.
+Termite is a visualization tool for inspecting the output of statistical topic models such as Latent Dirichlet allocation (LDA) using an interactive interface as shown above. Termite is an alternative to lists of per-topic words, the standard practice: Users can drill down to examine a specific topic by clicking on a circle or topic label in the matrix, revealing the word-frequency view. The order of the terms presented in this view also uses `seriation`, which accounts for co-occurrence and collocation likelihood between
+all pairs of words. Term probabilities are encoded in circles. For more details, see Chuang et al [1].
 
-Starting in 2014, the project [was moved to a separate Github project](https://github.com/uwdata/termite-data-server), split into two components, and unfortunately abandoned.
+This Termite fork differs from the source Termite: Instead of taking as input a single .csv corpus, it also expects a topic-term matrix. As such, a topic modeling algorithm is no longer part of Termite pipeline and must be run separately, affording greater flexibility on the choice of the topic modeling algorithm. The second view mentioned in the paper, showing the representative documents belonging to the topic when clicking on a circle or topic label in the matrix, was not found on the source Termite code, and hence is unavailable in this fork.
 
-This forked former version of Termite, which does not rely on a database, provides a simpler input for data to be analyzed and displayed.
+## Background
+
+The original Termite has two versions: The [first](https://github.com/StanfordHCI/termite) is a single component, and the second contains two components, [a data server](https://github.com/uwdata/termite-data-server) and [visualizations](https://github.com/uwdata/termite-visualizations). Because the later versions add more dependencies to the visualization I chose to fork the first version.
 
 ## Why this fork?
 
-Currently, there are some dependencies "hiccups" when running Termite out of the box, and this fork seeks to minimally document workarounds to get it running.
-
-A long term goal of this project is to decouple termite visualization from the termite data pipeline, by deferring the required input to a topic-term matrix and a document-topic matrix instead of the raw corpus. In doing so, other implementations of LDA and Topic Modelling, in general, can leverage the interface provided by Termite. A great example of this decoupling is [LDAVis](https://github.com/cpsievert/LDAvis), an r package visualization serving the same purpose and inspired by Termite.
+I created this fork because topic modeling visualizations are rare and few and the Termite project was abandoned. Unfortunately, both original versions of Termite binds a user to use [MALLET](http://mallet.cs.umass.edu/) or [STMT (Stanford Topic Modeling Toolkit)](https://nlp.stanford.edu/software/tmt/tmt-0.4/) to obtain the Termite topic visualization. This fork removes this dependency by taking as an additional input a topic-term matrix from the user. 
 
 ## Setup
 
-[README.old](https://github.com/sailuh/termite/blob/master/README.old) provides a great picture of how Termite was intended to execute when development was active.
+To install Termite, you will need [JDK](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) (last tested on JDK 8 Updated 231):
 
-To install Termite, from the main directory, execute:
-
-```
-./setup.sh
-```
-
-Termite will fetch a number of libraries it has as dependencies to your computer.
-
- * While installing the required dependencies, `setup.py`  will first throw an error stating it can't move the file `compiler-latest.zip`. Inspecting the .zip file manually, you will find a jar file containing the expected file, however with a different name convention: `name+version`. Simple extract the closure<version>.jar file, and rename it to `closure.jar` inside the `lib` folder. Re-running the script will then rename it to the intended name, and finish installing.
-
-## Usage
-
- Once the installation is concluded, **README.old** will recommend running one of its examples. However, the example corpus can no longer be downloaded. To explicitly overwrite the necessary parts to run the configuration file, directly using `execute.py` with explicit parameters can launch the visualization. Specifically:
+1. Download [termite](https://github.com/sailuh/termite) from this git repo. 
+2. Download [termite_dependencies](https://github.com/sailuh/termite_dependencies), and move the `libraries` folder (not the zip) inside the termite folder of step 1.
+3. On a terminal, enter the `termite` folder and type:
 
 ```
-./execute.py --corpus-path <corpus_file> example_lda.cfg --model-path <any_path_for_model> --data-path <any_path_for_output>
+./setup_offline.sh
 ```
 
+## Test Run
 
- * `--corpus-path` Specifies the corpus single file of interest. finance_corpus.txt, hosted in our Github project, is an example corpus [originally found on Termite creator's Github](https://github.com/YingHsuan/termite_data_server/blob/master/apps/mobile_payment_mallet/data/corpus.txt) that can be used for a test-run.
-   * In general, any corpus format is `doc-id\ttext`,i.e. a string of characters representing the id of a given document, tab, and the content. No spaces between the doc-id, tab and the first character of the document is allowed. The rest of the document can, in theory, contain any characters, but due to errors in formatting, it is recommended tokenization occurs over the raw corpus and then formatted to comply to the input format `doc-id\ttext`. The file should therefore contain as portion of the "text" a sequence of tokens, as it was done in the example **finance_corpus.txt**.
- * `--model-path` Is any path the user wants to store the topic model outputs generated by the topic model pipeline.
- * `--data-path` Is any path to save Termite-internal working files.
+To launch Termite visualization of a topic-term matrix file:
 
-Termite will then create the necessary folders or overwrite the necessary folder and files in the specified path. Beware, this process can take from 5 to 30 minutes in a 2016 Macbook-Pro.
-
-Finally, to open the visualization in your own computer, as instructed by **README.old**:
-
- 1. Change into output directory (specified in the configuration file)
+1. **Provide the necessary input files**. Every termite viz is inside a separate project folder. In this test run we will use `termite/example-project`. For other runs, you can simply create any other folder inside `termite`, and provide as a parameter instead of example-project. You must use the same organization of folders and naming convention as example-project shown here:
 
 ```
-cd <any_path_for_output>/public_html
+├── model
+│   ├── term-index.txt
+│   ├── term-topic-matrix.txt
+│   └── topic-index.txt
+├── tokens
+│   └── tokens.txt
+
 ```
 
- 2. Start a local server using python
+* **term-topic-matrix.txt**: a term-topic matrix. The rows are the terms, and the topics the columns. 
+* **term-index.txt**: The row names.
+* **topic-index.txt**: The column names.
+
+* **tokens.txt**: A tokenized corpus, where every line is a document following this format: row_number`\t`list_of_tokens, where `\t` is the tab symbol. 
+
+2. Run the following to use example-project: 
 
 ```
-./web.sh
+python execute.py example.cfg --data-path example-project
 ```
 
- 3. Open http://localhost:8888 in a modern web browser (Chrome, Safari, Firefox, or Opera)
-      to view a visualization of the model outputs.
+ * `--data-path` Is the path, inside the termite folder, your project folder is. 
 
-Or, to publish the results on a webserver:
- 1. Copy public_html directory to your remote server.
+ 3. Termite will then process the input files, and create additional folders inside `example-project`. The final `example-project` folder will have the following organization:
+
+```
+├── model
+│   ├── term-index.txt
+│   ├── term-topic-matrix.txt
+│   └── topic-index.txt
+├── saliency
+│   ├── term-info.json
+│   ├── term-info.txt
+│   ├── topic-info.json
+│   └── topic-info.txt
+├── similarity
+│   └── combined-g2.txt
+├── tokens
+│   └── tokens.txt
+└── topic-model
+    ├── output-topic-keys.txt
+    ├── output.model
+    ├── text.vectors
+    ├── topic-word-weights.txt
+    └── word-topic-counts.txt
+```
+
+On your terminal, run the following: 
+
+```
+./termite/example-project/public_html/web.sh
+```
+
+4. A local webserver will launch on localhost:8888. Open a web browser and type ` http://localhost:8888/` to see the Termite visualization. You can also copy the `public_html` folder to a remote server to make it accessible on the web.
+
+## F.A.Q.
+
+ * 1. Why must I provide a `tokens.txt`?
+   * To display the list of terms when a user clicks a circle, Termite uses `seriation` to order the terms. This method relies on term co-ocurrence in the original document, which is not available in a topic-term matrix. 
+
+## Future Work
+
+This fork is at best a quick hack to bypass the mallet/stmt dependencies. The wiki project contains an exhaustive explanation of some of the code functionality to make this hack possible. In the future, I intend to remove some of the dead code and functionality that is bypassed of Termite.  
 
 ## References
 
