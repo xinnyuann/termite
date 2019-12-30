@@ -91,7 +91,7 @@ class ComputeSeriation( object ):
 		preBest = []
 		postBest = []
 		
-		for iteration in range(numSeriatedTerms):
+		for iteration in range(numSeriatedTerms) and candidateTerms:
 			print "Iteration no. ", iteration
 			
 			addedTerm = 0
@@ -169,7 +169,7 @@ class ComputeSeriation( object ):
 		return (preBest, postBest, sorted(bestEnergies, key=itemgetter(1), reverse=True))
 	
 	def iterate_eff( self, candidateTerms, term_ordering, term_iter_index, buffers, bestEnergies, iteration_no ):
-		maxEnergyChange = 0.0;
+		maxEnergyChange = -9999999999999999;
 		maxTerm = "";
 		maxPosition = 0;
 		
