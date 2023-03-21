@@ -3,7 +3,7 @@
 
 import json
 import os
-from utf8_utils import UnicodeReader, UnicodeWriter
+from pipeline.utf8_utils import UnicodeReader, UnicodeWriter
 
 def CheckAndMakeDirs( path ):
 	if not os.path.exists( path ):
@@ -16,7 +16,7 @@ def ReadAsList( filename ):
 	"""
 	data = []
 	with open( filename, 'r' ) as f:
-		lines = f.read().decode( 'utf-8' ).splitlines()
+		lines = f.read().splitlines()
 		for line in lines:
 			data.append( line )
 	return data
@@ -24,7 +24,7 @@ def ReadAsList( filename ):
 def ReadAsVector( filename ):
 	vector = []
 	with open( filename, 'r' ) as f:
-		lines = f.read().decode( 'utf-8' ).splitlines()
+		lines = f.read().splitlines()
 		for line in lines:
 			vector.append( float( line ) )
 	return vector

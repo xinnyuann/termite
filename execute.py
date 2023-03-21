@@ -3,7 +3,7 @@
 
 import sys
 import argparse
-import ConfigParser
+import configparser
 import logging
 
 import time
@@ -20,7 +20,7 @@ class Execute( object ):
 
 	"""
 	Runs entire data processing pipeline and sets up client.
-	
+
 	Execute data processing scripts in order:
 		1. tokenize.py:				Tokenize corpus
 		2. train_stmt/mallet.py:	Train model
@@ -29,24 +29,24 @@ class Execute( object ):
 		5. compute_seriation.py:	Seriates terms
 		6. prepare_data_for_client.py:	Generates datafiles for client
 		7. prepare_vis_for_client.py:	Copies necessary scripts for client
-	
+
 	Input is configuration file specifying target corpus and destination directory.
-	
-	Creates multiple directories that store files from each stage of the pipeline. 
+
+	Creates multiple directories that store files from each stage of the pipeline.
 	Among the directories is the public_html directory that holds all client files.
 	"""
-	
+
 	DEFAULT_NUM_TOPICS = 25
-	
+
 	def __init__( self, logging_level ):
 		self.logger = logging.getLogger( 'Execute' )
 		self.logger.setLevel( logging_level )
 		handler = logging.StreamHandler( sys.stderr )
 		handler.setLevel( logging_level )
 		self.logger.addHandler( handler )
-	
+
 	def execute( self, corpus_format, corpus_path, tokenization, model_library, model_path, data_path, num_topics, number_of_seriated_terms ):
-		
+
 		assert corpus_format is not None
 		assert corpus_path is not None
 		assert model_library is not None
@@ -56,7 +56,7 @@ class Execute( object ):
 		if num_topics is None:
 			num_topics = Execute.DEFAULT_NUM_TOPICS
 		assert number_of_seriated_terms is not None
-		
+
 		self.logger.info( '--------------------------------------------------------------------------------' )
 		#self.logger.info( 'Tokenizing source corpus...'                                                      )
 		self.logger.info( '    corpus_path = %s (%s)', corpus_path, corpus_format                            )
@@ -66,10 +66,10 @@ class Execute( object ):
 		self.logger.info( '    number_of_seriated_terms = %s', number_of_seriated_terms                      )
 		self.logger.info( '--------------------------------------------------------------------------------' )
 		#self.logger.info( 'Current time = {}'.format( time.ctime() ) )
-		
+
 		# Tokenize( self.logger.level ).execute( corpus_format, corpus_path, data_path, tokenization )
 		# self.logger.info( 'Current time = {}'.format( time.ctime() ) )
-		
+
 		# if model_library == 'stmt':
 		# 	command = 'pipeline/train_stmt.sh {} {} {}'.format( data_path + '/tokens/tokens.txt', model_path, num_topics )
 		# 	os.system( command )
@@ -79,7 +79,7 @@ class Execute( object ):
 		# 	os.system( command )
 		# 	ImportMallet( self.logger.level ).execute( model_library, model_path, data_path )
 		self.logger.info( 'Current time = {}'.format( time.ctime() ) )
-		
+
 		ComputeSaliency( self.logger.level ).execute( data_path )
 		self.logger.info( 'Current time = {}'.format( time.ctime() ) )
 
@@ -91,7 +91,7 @@ class Execute( object ):
 
 		PrepareDataForClient( self.logger.level ).execute( data_path )
 		self.logger.info( 'Current time = {}'.format( time.ctime() ) )
-		
+
 		command = 'pipeline/prepare_vis_for_client.sh {}'.format( data_path )
 		os.system( command )
 		self.logger.info( 'Current time = {}'.format( time.ctime() ) )
@@ -110,7 +110,7 @@ def main():
 	parser.add_argument( '--number-of-seriated-terms', type = int, dest = 'number_of_seriated_terms', help = 'Override the number of terms to seriate.' )
 	parser.add_argument( '--logging'      , type = int, dest = 'logging'      , help = 'Override logging level specified in config file.' )
 	args = parser.parse_args()
-	
+
 	corpus_format = None
 	corpus_path = None
 	model_library = None
@@ -119,9 +119,9 @@ def main():
 	num_topics = None
 	number_of_seriated_terms = None
 	logging_level = 20
-	
+
 	# Read in default values from the configuration file
-	config = ConfigParser.RawConfigParser()
+	config = configparser.RawConfigParser()
 	config.read( args.config_file )
 	if config.has_section( 'Corpus' ) and config.has_option( 'Corpus', 'format' ):
 		corpus_format = config.get( 'Corpus', 'format' )
@@ -141,7 +141,7 @@ def main():
 		number_of_seriated_terms = config.getint( 'Termite', 'number_of_seriated_terms' )
 	if config.has_section( 'Misc' ) and config.has_option( 'Misc', 'logging' ):
 		logging_level = config.getint( 'Misc', 'logging' )
-	
+
 	# Read in user-specifiec values from the program arguments
 	if args.corpus_format is not None:
 		corpus_format = args.corpus_format
@@ -159,7 +159,7 @@ def main():
 		number_of_seriated_terms = args.number_of_seriated_terms
 	if args.logging is not None:
 		logging_level = args.logging
-	
+
 	Execute( logging_level ).execute( corpus_format, corpus_path, tokenization, model_library, model_path, data_path, num_topics, number_of_seriated_terms )
 
 if __name__ == '__main__':
