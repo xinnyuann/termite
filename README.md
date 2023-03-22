@@ -1,8 +1,15 @@
 # Termite
 
-![termite_interface_not_loaded](doc/termite_interface.png)
+## Why this fork?
 
-This is a fork project of Termite by Chuang et al [1].
+This is a fork project of Termite from https://github.com/sailuh/termite , which is originally developed by Chuang et al [1] without maintainance since 2019. The package was initially developed in Python 2 and further separated out as a stand-alone topic modeling visualization tool by [Software Analytics Insight Lab](https://github.com/sailuh/termite). 
+
+At the beginning, I created this fork because of my internship project on topic modeling, when I had hard time finding stunning and self-explanatory visualizations for topic modeling. Over time, I realized how rare and inspiring Termite project is tho still abandoned. My hope is to make it work with Python 3 and meanwhile enhance my "unfinished" internship project ;)
+
+The following README inherit [Software Analytics Insight Lab](https://github.com/sailuh/termite) with minor changes.
+
+
+![termite_interface_not_loaded](doc/termite_interface.png)
 
 Termite is a visualization tool for inspecting the output of statistical topic models such as Latent Dirichlet allocation (LDA) using an interactive interface as shown above. Termite is an alternative to lists of per-topic words, the standard practice: Users can drill down to examine a specific topic by clicking on a circle or topic label in the matrix, revealing the word-frequency view. The order of the terms presented in this view also uses `seriation`, which accounts for co-occurrence and collocation likelihood between
 all pairs of words. Term probabilities are encoded in circles. For more details, see Chuang et al [1].
@@ -13,17 +20,13 @@ This Termite fork differs from the source Termite: Instead of taking as input a 
 
 The original Termite has two versions: The [first](https://github.com/StanfordHCI/termite) is a single component, and the second contains two components, [a data server](https://github.com/uwdata/termite-data-server) and [visualizations](https://github.com/uwdata/termite-visualizations). Because the later versions add more dependencies to the visualization I chose to fork the first version.
 
-## Why this fork?
-
-I created this fork because topic modeling visualizations are rare and few and the Termite project was abandoned. Unfortunately, both original versions of Termite binds a user to use [MALLET](http://mallet.cs.umass.edu/) or [STMT (Stanford Topic Modeling Toolkit)](https://nlp.stanford.edu/software/tmt/tmt-0.4/) to obtain the Termite topic visualization. This fork removes this dependency by taking as an additional input a topic-term matrix from the user. 
 
 ## Setup
 
-To install Termite, you will need [JDK](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) (last tested on JDK 8 Updated 231):
+To install Termite, you will need JDK (now tested on JDK 19 Updated):
 
-1. Download [termite](https://github.com/sailuh/termite) from this git repo. 
-2. Download [termite_dependencies](https://github.com/sailuh/termite_dependencies), and move the `libraries` folder (not the zip) inside the termite folder of step 1.
-3. On a terminal, enter the `termite` folder and type:
+1. Download termite from this git repo. 
+2. On a terminal, enter the `termite` folder and type:
 
 ```
 ./setup_offline.sh
@@ -83,10 +86,10 @@ python execute.py example.cfg --data-path example-project
     └── word-topic-counts.txt
 ```
 
-On your terminal, run the following: 
+On your terminal within termite repository, run the following: 
 
 ```
-./termite/example-project/public_html/web.sh
+./example-project/public_html/web.sh
 ```
 
 4. A local webserver will launch on localhost:8888. Open a web browser and type ` http://localhost:8888/` to see the Termite visualization. You can also copy the `public_html` folder to a remote server to make it accessible on the web.
@@ -98,7 +101,7 @@ On your terminal, run the following:
 
 ## Future Work
 
-This fork is at best a quick hack to bypass the mallet/stmt dependencies. The wiki project contains an exhaustive explanation of some of the code functionality to make this hack possible. In the future, I intend to remove some of the dead code and functionality that is bypassed of Termite.  
+This fork is at best a quick hack to bypass the mallet/stmt dependencies thanks to all the hard work of [Software Analytics Insight Lab](https://github.com/sailuh/termite). The wiki project contains an exhaustive explanation of some of the code functionality to make this hack possible. In the future, I intend to remove some of the dead code and functionality to make it work for Python3.  
 
 ## References
 
