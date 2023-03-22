@@ -1,6 +1,6 @@
 # Termite
 
-## Why this fork?
+## Why this fork? Why Termite?
 
 This is a fork project of Termite from https://github.com/sailuh/termite , which is originally developed by Chuang et al [1] without maintainance since 2019. The package was initially developed in Python 2 and further separated out as a stand-alone topic modeling visualization tool by [Software Analytics Insight Lab](https://github.com/sailuh/termite). 
 
