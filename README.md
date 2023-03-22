@@ -2,26 +2,28 @@
 
 ## Why this fork? Why Termite?
 
-This is a fork project of Termite from https://github.com/sailuh/termite , which is originally developed by Chuang et al [1] without maintainance since 2019. The package was initially developed in Python 2 and further separated out as a stand-alone topic modeling visualization tool by [Software Analytics Insight Lab](https://github.com/sailuh/termite). 
-
-At the beginning, I created this fork because of my internship project on topic modeling, when I had hard time finding stunning and self-explanatory visualizations for topic modeling. Over time, I realized how rare and inspiring Termite project is tho still abandoned. My hope is to make it work with Python 3 and meanwhile enhance my "unfinished" internship project ;)
-
-The following README inherit [Software Analytics Insight Lab](https://github.com/sailuh/termite) with minor changes.
-
+This is a fork project of Termite from https://github.com/sailuh/termite , which is originally developed by Chuang et al [1] without maintainance since 2019. Termite is a visualization tool for inspecting the output of statistical topic models such as Latent Dirichlet allocation (LDA) using an interactive interface as shown above. Termite is an alternative to lists of per-topic words, the standard practice: Users can drill down to examine a specific topic by clicking on a circle or topic label in the matrix, revealing the word-frequency view. The order of the terms presented in this view also uses `seriation`, which accounts for co-occurrence and collocation likelihood between all pairs of words. Term probabilities are encoded in circles. For more details, see Chuang et al [1].
 
 ![termite_interface_not_loaded](doc/termite_interface.png)
 
-Termite is a visualization tool for inspecting the output of statistical topic models such as Latent Dirichlet allocation (LDA) using an interactive interface as shown above. Termite is an alternative to lists of per-topic words, the standard practice: Users can drill down to examine a specific topic by clicking on a circle or topic label in the matrix, revealing the word-frequency view. The order of the terms presented in this view also uses `seriation`, which accounts for co-occurrence and collocation likelihood between
-all pairs of words. Term probabilities are encoded in circles. For more details, see Chuang et al [1].
+The package was initially developed in Python 2 and further separated out as a stand-alone topic modeling visualization tool by [Software Analytics Insight Lab](https://github.com/sailuh/termite). 
 
-This Termite fork differs from the source Termite: Instead of taking as input a single .csv corpus, it also expects a topic-term matrix. As such, a topic modeling algorithm is no longer part of Termite pipeline and must be run separately, affording greater flexibility on the choice of the topic modeling algorithm. The second view mentioned in the paper, showing the representative documents belonging to the topic when clicking on a circle or topic label in the matrix, was not found on the source Termite code, and hence is unavailable in this fork.
+At the beginning, I created this fork because of my internship project on topic modeling, when I had hard time finding stunning and self-explanatory visualizations for topic modeling. Over time, I realized how rare and inspiring Termite project is tho still abandoned. My hope is to make it work with Python 3 and meanwhile enhance my "unfinished" internship project ;)
 
-## Background
+
+## What's new in this fork?
+
+
+==============================================================
+
+_(The following README inherit [Software Analytics Insight Lab](https://github.com/sailuh/termite) with minor changes...)_
+
+### Background
 
 The original Termite has two versions: The [first](https://github.com/StanfordHCI/termite) is a single component, and the second contains two components, [a data server](https://github.com/uwdata/termite-data-server) and [visualizations](https://github.com/uwdata/termite-visualizations). Because the later versions add more dependencies to the visualization I chose to fork the first version.
 
 
-## Setup
+### Setup
 
 To install Termite, you will need JDK (now tested on JDK 19 Updated):
 
@@ -32,7 +34,7 @@ To install Termite, you will need JDK (now tested on JDK 19 Updated):
 ./setup_offline.sh
 ```
 
-## Test Run
+### Test Run
 
 To launch Termite visualization of a topic-term matrix file:
 
@@ -94,12 +96,12 @@ On your terminal within termite repository, run the following:
 
 4. A local webserver will launch on localhost:8888. Open a web browser and type ` http://localhost:8888/` to see the Termite visualization. You can also copy the `public_html` folder to a remote server to make it accessible on the web.
 
-## F.A.Q.
+### F.A.Q.
 
  * 1. Why must I provide a `tokens.txt`?
    * To display the list of terms when a user clicks a circle, Termite uses `seriation` to order the terms. This method relies on term co-ocurrence in the original document, which is not available in a topic-term matrix. 
 
-## Future Work
+### Future Work
 
 This fork is at best a quick hack to bypass the mallet/stmt dependencies thanks to all the hard work of [Software Analytics Insight Lab](https://github.com/sailuh/termite). The wiki project contains an exhaustive explanation of some of the code functionality to make this hack possible. In the future, I intend to remove some of the dead code and functionality to make it work for Python3.  
 
