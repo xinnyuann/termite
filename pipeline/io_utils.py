@@ -31,10 +31,10 @@ def ReadAsVector( filename ):
 
 def ReadAsMatrix( filename ):
 	matrix = []
-	with open( filename, 'r' ) as f:
+	with open( filename, 'r', encoding='utf-8' ) as f:
 		lines = UnicodeReader( f )
 		for line in lines:
-			matrix.append( map( float, line ) )
+			matrix.append(list(map( float, line )) )
 	return matrix
 
 def ReadAsSparseVector( filename ):
@@ -47,7 +47,7 @@ def ReadAsSparseVector( filename ):
 
 def ReadAsSparseMatrix( filename ):
 	matrix = {}
-	with open( filename, 'r' ) as f:
+	with open( filename, 'r', encoding='utf-8' ) as f:
 		lines = UnicodeReader( f )
 		for ( aKey, bKey, value ) in lines:
 			matrix[ (aKey, bKey) ] = float( value )
@@ -66,7 +66,7 @@ def ReadAsJson( filename ):
 def WriteAsList( data, filename ):
 	with open( filename, 'w' ) as f:
 		for element in data:
-			f.write( element.encode( 'utf-8' ) + '\n' )
+			f.write( element + '\n' ) #removed .encode('utf-8') - TypeError: can't concat str to bytes
 
 def WriteAsVector( vector, filename ):
 	with open( filename, 'w' ) as f:
@@ -109,7 +109,7 @@ def WriteAsJson( data, filename ):
 	Write dict as-is to disk as a JSON object.
 	"""
 	with open( filename, 'w' ) as f:
-		json.dump( data, f, encoding = 'utf-8', indent = 2, sort_keys = True )
+		json.dump( data, f, indent = 2, sort_keys = True )
 
 def WriteAsTabDelimited( data, filename, fields ):
 	"""
@@ -117,13 +117,13 @@ def WriteAsTabDelimited( data, filename, fields ):
 	Take in a list of output fields.
 	Write specified fields to disk, as a tab-delimited file (with header row).
 	"""
-	with open( filename, 'w' ) as f:
+	with open( filename, 'w', encoding='utf-8' ) as f:
 		writer = UnicodeWriter( f )
 		writer.writerow( fields )
 		for element in data:
 			values = []
 			for field in fields:
-				if not type( element[field] ) is unicode:
+				if not isinstance(element[field],str):
 					values.append( str( element[field] ) )
 				else:
 					values.append( element[field] )

@@ -10,6 +10,7 @@ http://docs.python.org/2/library/csv.html
 import csv, codecs
 from io import StringIO
 
+
 class UTF8Recoder:
 	"""
 	Iterator that reads an encoded stream and reencodes the input to UTF-8
@@ -20,8 +21,8 @@ class UTF8Recoder:
 	def __iter__(self):
 		return self
 
-	def next(self):
-		return self.reader.next().encode("utf-8")
+	def __next__(self):
+		return next(self.reader).encode("utf-8")
 
 class UnicodeReader:
 	"""
@@ -29,13 +30,16 @@ class UnicodeReader:
 	which is encoded in the given encoding.
 	"""
 
-	def __init__(self, f, dialect=csv.excel, encoding="utf-8", delimiter="\t", **kwds):
-		f = UTF8Recoder(f, encoding)
-		self.reader = csv.reader(f, dialect=dialect, delimiter=delimiter, **kwds)
+	def __init__(self, f, dialect=csv.excel,encoding="utf-8", delimiter="\t", **kwds):
+		# f = UTF8Recoder(f, encoding)
+		def fix_nulls(s):
+		    for line in s:
+		        yield line.replace('\0', ' ')
+		self.reader = csv.reader(fix_nulls(f),dialect=dialect, delimiter=delimiter, **kwds)
 
-	def next(self):
-		row = self.reader.next()
-		return [unicode(s, "utf-8") for s in row]
+	def __next__(self):
+		row = next(self.reader)
+		return [s for s in row]
 
 	def __iter__(self):
 		return self
@@ -51,15 +55,14 @@ class UnicodeWriter:
 		self.queue = StringIO()
 		self.writer = csv.writer(self.queue, dialect=dialect, delimiter=delimiter, **kwds)
 		self.stream = f
-		self.encoder = codecs.getincrementalencoder(encoding)()
+		# self.encoder = codecs.getincrementalencoder(encoding)()
 
 	def writerow(self, row):
-		self.writer.writerow([s.encode("utf-8") for s in row])
+		self.writer.writerow([s for s in row]) #.encode("utf-8") will create all string with b'
 		# Fetch UTF-8 output from the queue ...
 		data = self.queue.getvalue()
-		data = data.decode("utf-8", "ignore")
 		# ... and reencode it into the target encoding
-		data = self.encoder.encode(data)
+		# data = self.encoder.encode(data)
 		# write to the target stream
 		self.stream.write(data)
 		# empty queue

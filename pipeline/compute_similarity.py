@@ -81,7 +81,7 @@ class ComputeSimilarity( object ):
 		document_count = 0
 		occurrence = {}
 		cooccurrence = {}
-		for docID, docTokens in self.tokens.data.iteritems():
+		for docID, docTokens in self.tokens.data.items():
 			self.logger.debug( '    %s (%d tokens)', docID, len(docTokens) )
 			tokenSet = frozenset(docTokens)
 			document_count += 1
@@ -100,7 +100,7 @@ class ComputeSimilarity( object ):
 		window_count = 0
 		occurrence = {}
 		cooccurrence = {}
-		for docID, docTokens in self.tokens.data.iteritems():
+		for docID, docTokens in self.tokens.data.items():
 			allWindowTokens = self.getSlidingWindowTokens( docTokens, sliding_window_size )
 			self.logger.debug( '    %s (%d tokens, %d windows)', docID, len(docTokens), len(allWindowTokens) )
 			for windowTokens in allWindowTokens:
@@ -128,15 +128,15 @@ class ComputeSimilarity( object ):
 		return allWindows
 
 	def computeTokenCounts( self ):
-		token_count = sum( len(docTokens) for docTokens in self.tokens.data.itervalues() )
+		token_count = sum( len(docTokens) for docTokens in self.tokens.data.values() )
 
 		unigram_counts = {}
-		for docTokens in self.tokens.data.itervalues():
+		for docTokens in self.tokens.data.values():
 			for token in docTokens:
 				self.incrementCount( unigram_counts, token )
 
 		bigram_counts = {}
-		for docTokens in self.tokens.data.itervalues():
+		for docTokens in self.tokens.data.values():
 			prevToken = None
 			for currToken in docTokens:
 				if prevToken is not None:
